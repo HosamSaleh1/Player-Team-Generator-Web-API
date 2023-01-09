@@ -39,4 +39,9 @@ class Player extends Model
     {
         return $this->hasMany(PlayerSkill::class);
     }
+
+    public function getSkillsAttribute()
+    {
+        return $this->skills()->get();
+    }
 }

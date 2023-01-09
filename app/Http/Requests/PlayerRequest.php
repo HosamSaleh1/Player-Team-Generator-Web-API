@@ -26,7 +26,7 @@ class PlayerRequest extends FormRequest
         return [
             'name' => 'required|string',
             'position' => 'required|string',
-            'playerSkills' => 'required|array:skill,value',
+            'playerSkills' => 'required',
         ];
     }
 }

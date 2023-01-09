@@ -44,24 +44,27 @@ class PlayerController extends Controller
             return response()->json("Player skills are required", 400);
         }
         $player = Player::create($request->except('playerSkills'));
-        $player->skills()->create($request->playerSkills);
-        // $data = $request->playerSkills;
-        // $data['player_id'] = $player->id;
-        // PlayerSkill::create($data);
-
-        // for ($i=0; $i < count($data); $i++) { 
-        //     $data[$i]['player_id'] = $player->id;
-        //     PlayerSkill::create($data[$i]);
-        // }
+        foreach ($request->playerSkills as $playerSkill) {
+            $player->skills()->create($playerSkill);
+        }
         return response()->json($player);
         // return response("Failed", 500);
     }
 
     public function update(PlayerRequest $request)
     {
-        $player = Player::find($request->id)->first();
+        $player = Player::find($request->id);
+        if (!$player) {
+            return response()->json("Player not found", 404);
+        }
         $player->update($request->except('playerSkills'));
-        $player->playerSkills()->update($request->playerSkills);
+        $skills = $player->skills()->get();
+        if (!$skills) {
+            $player->skills()->create($request->playerSkills);
+        }
+        foreach ($request->playerSkills as $playerSkill) {
+            $player->skills()->update($playerSkill);
+        }
         return response()->json($player);
         // return response("Failed", 500);
     }
