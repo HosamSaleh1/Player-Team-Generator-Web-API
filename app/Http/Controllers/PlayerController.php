@@ -47,6 +47,7 @@ class PlayerController extends Controller
         foreach ($request->playerSkills as $playerSkill) {
             $player->skills()->create($playerSkill);
         }
+        $player = Player::find($player->id);
         return response()->json($player);
         // return response("Failed", 500);
     }
@@ -59,12 +60,15 @@ class PlayerController extends Controller
         }
         $player->update($request->except('playerSkills'));
         $skills = $player->skills()->get();
-        if (!$skills) {
-            $player->skills()->create($request->playerSkills);
+        if (count($skills)>0) {
+            foreach ($skills as $skill) {
+                $skill->delete();
+            }
         }
         foreach ($request->playerSkills as $playerSkill) {
-            $player->skills()->update($playerSkill);
+            $player->skills()->create($playerSkill);
         }
+        $player = Player::find($player->id);
         return response()->json($player);
         // return response("Failed", 500);
     }
