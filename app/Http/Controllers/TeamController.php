@@ -22,6 +22,11 @@ class TeamController extends Controller
                 // $players = Player::where('position', $request->all()[$i]['position'])->limit($request->all()[$i]['numberOfPlayers'])->get();
                 $players = Player::where('position', $request->all()[$i]['position'])
                                     // ->skills()->max($request->all()[$i]['mainSkill'])
+                                    // ->with(['skills' => function($query){
+                                        // $query->where('skill', $request->all()[$i]['mainSkill']);
+                                        // ->max('value');
+                                    // }]
+                                    // )
                                     ->limit($request->all()[$i]['numberOfPlayers'])->get();
 
                 if(!$players || count($players) < $request->all()[$i]['numberOfPlayers']){
